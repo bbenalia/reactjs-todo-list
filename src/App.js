@@ -92,7 +92,7 @@ class App extends Component {
         ? { ...todo, name: editTodoName, edit: false }
         : todo;
     });
-    this.setState({ todos: todoToEdit, editTodoName: "" });
+    this.setState({ todos: todoToEdit });
   }
 
   render() {
