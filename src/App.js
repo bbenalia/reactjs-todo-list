@@ -15,19 +15,22 @@ class App extends Component {
     super(props);
     this.state = {
       todos: [
-        { id: 1, name: "Brahim Benalia Casas", complete: false },
-        { id: 2, name: "Marc Solá Crack", complete: false },
-        { id: 3, name: "Brahim Benalia Casas", complete: false },
-        { id: 4, name: "Marc Solá Crack", complete: false },
+        { id: 1, name: "Brahim Benalia Casas", edit: false, complete: false },
+        { id: 2, name: "Marc Solá Crack", edit: false, complete: false },
+        { id: 3, name: "Brahim Benalia Casas", edit: false, complete: false },
+        { id: 4, name: "Marc Solá Crack", edit: false, complete: false },
       ],
       todoName: "",
-      checked: false,
+      editTodoName: "",
     };
     this.handleAddTodo = this.handleAddTodo.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
     this.handleChangeCheck = this.handleChangeCheck.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
+    this.handleChangeTodo = this.handleChangeTodo.bind(this);
+    this.handleEditSubmit = this.handleEditSubmit.bind(this);
   }
 
   handleAddTodo({ todos, todoName }) {
@@ -65,8 +68,35 @@ class App extends Component {
     this.setState({ todos: arr });
   }
 
+  handleEdit(id) {
+    const { todos } = this.state;
+    const todoToEdit = todos.map((todo) => {
+      return todo.id === id ? { ...todo, edit: true } : todo;
+    });
+    this.setState({ todos: todoToEdit });
+  }
+
+  handleChangeTodo(e) {
+    // const { todos } = this.state;
+    this.setState({ editTodoName: e.target.value });
+    // const todoToEdit = todos.map((todo) => {
+    //   return todo.id === id ? { ...todo, name: e.target.value } : todo;
+    // });
+    // this.setState({ todos: todoToEdit });
+  }
+
+  handleEditSubmit(e, id) {
+    const { todos, editTodoName } = this.state;
+    const todoToEdit = todos.map((todo) => {
+      return todo.id === id
+        ? { ...todo, name: editTodoName, edit: false }
+        : todo;
+    });
+    this.setState({ todos: todoToEdit, editTodoName: "" });
+  }
+
   render() {
-    const { todos, todoName } = this.state;
+    const { todos, todoName, editTodoName } = this.state;
     return (
       <>
         <header>
@@ -121,6 +151,10 @@ class App extends Component {
               {...routeProps}
               handleChangeCheck={this.handleChangeCheck}
               handleRemove={this.handleRemove}
+              handleEdit={this.handleEdit}
+              handleChangeTodo={this.handleChangeTodo}
+              handleEditSubmit={this.handleEditSubmit}
+              editTodoName={editTodoName}
               todos={todos}
             />
           )}
